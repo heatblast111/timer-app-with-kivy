@@ -1,1 +1,94 @@
 #:kivy 2.3.1
+#:import hex kivy.utils.get_color_from_hex
+
+<CountdownWidget>:
+    # Let the widget fill the entire window.
+    size_hint: 1, 1
+    orientation: "vertical"
+    
+    # Full-screen background.
+    canvas.before:
+        Color:
+            rgba: hex("#2c3e50")  # Dark blue-gray.
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # Use an AnchorLayout to center the inner content.
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "center"
+
+        # The BoxLayout here contains our countdown elements at a fixed size.
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: None, None
+            size: "300dp", "400dp"  # Fixed inner container size.
+            spacing: "20dp"
+            padding: "20dp"
+
+            # TextInput for entering seconds.
+            TextInput:
+                id: input_seconds
+                hint_text: "Enter seconds for countdown"
+                multiline: False
+                input_filter: 'int'
+                size_hint_y: None
+                height: "40dp"          # Smaller height.
+                font_size: "18dp"
+                padding: "10dp"
+                background_normal: ""   # Remove default image.
+                background_color: hex("#ecf0f1")
+                foreground_color: hex("#2c3e50")
+                cursor_color: hex("#2c3e50")
+                halign: "center"
+                valign: "middle"
+                on_text_validate: root.start_timer()
+
+            # Label for displaying the timer.
+            Label:
+                text: root.timer_text
+                font_size: "72dp"       # Increased size for emphasis.
+                size_hint_y: None
+                height: "150dp"
+                color: hex("#ecf0f1")
+                bold: True
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+            # Button to start the timer.
+            Button:
+                text: "Start Timer"
+                size_hint_y: None
+                height: "40dp"          # Smaller button.
+                font_size: "18dp"
+                # Disable default backgrounds.
+                background_normal: ""
+                background_color: 0, 0, 0, 0
+                color: hex("#ecf0f1")
+                bold: True
+                on_press: root.start_timer()
+                canvas.before:
+                    # Use stencil instructions to clip the red rounded background.
+                    StencilPush
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
+                    StencilUse
+                    Color:
+                        rgba: hex("#e74c3c")
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
+                    StencilUnUse
+                    StencilPop
+                canvas.after:
+                    Color:
+                        rgba: (1, 1, 1, 0.1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
