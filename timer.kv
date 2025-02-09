@@ -1,18 +1,31 @@
 #:kivy 2.3.1
 #:import hex kivy.utils.get_color_from_hex
+#:import Video kivy.uix.video.Video
+
+<RootWidget>:
+    FloatLayout:
+        # Background Video widget
+        Video:
+            id: bg_video
+            source: "./assets/Recording 2024-05-08 195534.mp4"   
+            state: "play"
+            options: {'eos': 'loop'}     
+            allow_stretch: True
+            keep_ratio: False
+            size_hint: 1, 1
+            pos: self.pos
+            opacity: 0.3
+            volume: 0
+
+        CountdownWidget:
+            size_hint: 1, 1
 
 <CountdownWidget>:
     # Let the widget fill the entire window.
     size_hint: 1, 1
     orientation: "vertical"
     
-    # Full-screen background.
-    canvas.before:
-        Color:
-            rgba: hex("#2c3e50")  # Dark blue-gray.
-        Rectangle:
-            pos: self.pos
-            size: self.size
+    
 
     # Use an AnchorLayout to center the inner content.
     AnchorLayout:
@@ -22,11 +35,22 @@
         # The BoxLayout here contains our countdown elements at a fixed size.
         BoxLayout:
             orientation: "vertical"
-            size_hint: None, None
-            size: "300dp", "400dp"  # Fixed inner container size.
-            spacing: "20dp"
-            padding: "20dp"
+            spacing: "30dp"
+            padding: "50dp"
 
+            # Label for displaying the timer.
+            Label:
+                text: root.timer_text
+                font_size: "190dp"       # Increased size for emphasis.
+                font_name: "./assets/MouldyCheeseRegular-WyMWG.ttf"
+                height: "300dp"
+                width: root.width
+                color: hex("#ecf0f1")
+                bold: True
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+            
             # TextInput for entering seconds.
             TextInput:
                 id: input_seconds
@@ -34,8 +58,12 @@
                 multiline: False
                 input_filter: 'int'
                 size_hint_y: None
+                size_hint_x: None
+                pos_hint: {'center_x': 0.5}
                 height: "40dp"          # Smaller height.
-                font_size: "18dp"
+                width: "250dp"
+                font_size: "16dp"
+                font_name: "./assets/MouldyCheeseRegular-WyMWG.ttf"
                 padding: "10dp"
                 background_normal: ""   # Remove default image.
                 background_color: hex("#ecf0f1")
@@ -44,25 +72,19 @@
                 halign: "center"
                 valign: "middle"
                 on_text_validate: root.start_timer()
-
-            # Label for displaying the timer.
-            Label:
-                text: root.timer_text
-                font_size: "72dp"       # Increased size for emphasis.
-                size_hint_y: None
-                height: "150dp"
-                color: hex("#ecf0f1")
-                bold: True
-                halign: "center"
-                valign: "middle"
-                text_size: self.size
+                
 
             # Button to start the timer.
             Button:
+                id: start_button
                 text: "Start Timer"
                 size_hint_y: None
-                height: "40dp"          # Smaller button.
+                size_hint_x: None
+                pos_hint: {'center_x': 0.5}
+                height: "45dp"
+                width: "110dp"          # Smaller button.
                 font_size: "18dp"
+                font_name: "./assets/MouldyCheeseRegular-WyMWG.ttf"
                 # Disable default backgrounds.
                 background_normal: ""
                 background_color: 0, 0, 0, 0
@@ -75,14 +97,14 @@
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [20]
+                        radius: [15]
                     StencilUse
                     Color:
                         rgba: hex("#e74c3c")
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [20]
+                        radius: [15]
                     StencilUnUse
                     StencilPop
                 canvas.after:
@@ -91,4 +113,4 @@
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [20]
+                        radius: [15]

@@ -3,6 +3,12 @@ from kivy.clock import Clock
 from kivy.properties import NumericProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 
+from kivy.config import Config
+# Config.set('graphics', 'fullscreen', 'auto')
+
+
+class RootWidget(BoxLayout):
+    pass  
 
 class CountdownWidget(BoxLayout):
     # Holds the remaining seconds.
@@ -16,6 +22,12 @@ class CountdownWidget(BoxLayout):
             total_seconds = int(self.ids.input_seconds.text)
         except ValueError:
             total_seconds = 0
+        
+         # Hide the TextInput and Button
+        self.ids.input_seconds.opacity = 0
+        self.ids.input_seconds.disabled = True
+        self.ids.start_button.opacity = 0
+        self.ids.start_button.disabled = True
 
         self.remaining = total_seconds
         self.update_timer_text(self.remaining)
@@ -26,10 +38,16 @@ class CountdownWidget(BoxLayout):
         Clock.schedule_interval(self.update_timer, 1)
 
     def update_timer(self, dt):
-        """Called every second; decrements the counter and updates the display."""
+        """Called every second; decrements the counter and updates the display.
+        When the timer ends, the TextInput and Button are made visible again."""
         if self.remaining <= 0:
             Clock.unschedule(self.update_timer)
             self.timer_text = "Time's up!"
+             # Re-show the TextInput and Button
+            self.ids.input_seconds.opacity = 1
+            self.ids.input_seconds.disabled = False
+            self.ids.start_button.opacity = 1
+            self.ids.start_button.disabled = False
         else:
             self.remaining -= 1
             self.update_timer_text(self.remaining)
@@ -44,8 +62,7 @@ class CountdownWidget(BoxLayout):
 
 class TimerApp(App):
     def build(self):
-        # The CountdownWidget now fills the window.
-        return CountdownWidget()
+        return RootWidget()
 
 
 if __name__ == "__main__":
