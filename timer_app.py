@@ -3,8 +3,10 @@ from kivy.clock import Clock
 from kivy.properties import NumericProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 
+
 from kivy.config import Config
 # Config.set('graphics', 'fullscreen', 'auto')
+# Config.set('graphics', 'multisamples', '0')
 
 
 class RootWidget(BoxLayout):
